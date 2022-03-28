@@ -15,7 +15,7 @@ router.post(
   [
     check('name', 'name is required').not().isEmpty(),
     check('email', 'Please enter valid email').isEmail(),
-    check('password', 'password need to be at least 12 char').isLength({
+    check('password', 'password need to be at least 5 char').isLength({
       min: 5,
     }),
   ],
@@ -24,6 +24,13 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
+    // if (!req.files || Object.keys(req.files).length === 0) {
+    //   return res.status(400).send('No files were uploaded.');
+    // }
+
+    // const file = req.files.myFile;
+    // const upath = 'public/uploads/' + file.name;
 
     try {
       let user1 = await User.findOne({ email: req.body.email });
@@ -36,7 +43,8 @@ router.post(
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: password,
+        password: password
+        // profileImage: file.name,
       });
       await newUser.save();
 
@@ -44,8 +52,13 @@ router.post(
         user: {
           id: newUser.id,
           name: newUser.name,
+          // profileImage: newUser.profileImage,
         },
       };
+
+      file.mv(upath, function (err) {
+        if (err) return res.status(500).send(err);
+      });
 
       jwt.sign(
         payload,
