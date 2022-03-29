@@ -35,7 +35,13 @@ router.post(
     try {
       let user1 = await User.findOne({ email: req.body.email });
       if (user1) {
-        return res.status(400).json({ errors: 'User already exist' });
+        return res.status(400).json({ errors: 'User already exists' });
+      }
+
+      console.log(user1);
+
+      if (req.body.password != req.body.confirm_password) {
+        return res.status(400).json({ errors: 'Password and confirm password do not match' });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -43,7 +49,7 @@ router.post(
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: password
+        password: password,
         // profileImage: file.name,
       });
       await newUser.save();
@@ -56,9 +62,9 @@ router.post(
         },
       };
 
-      file.mv(upath, function (err) {
-        if (err) return res.status(500).send(err);
-      });
+      // file.mv(upath, function (err) {
+      //   if (err) return res.status(500).send(err);
+      // });
 
       jwt.sign(
         payload,
