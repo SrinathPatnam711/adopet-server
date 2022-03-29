@@ -26,27 +26,24 @@ router.get('/', authMiddleware, async (req, res) => {
 router.post(
   '/',
   [
-    check('email', 'Please enter valid email').isEmail(),
-    check('password', 'password need to be at least 7 char').isLength({
-      min: 7,
-    }),
+    check('email', 'Please enter valid email').isEmail()
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: 'Please enter valid email' });
     }
 
     try {
       const { email, password } = req.body;
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ errors: 'Invalid credential' });
+        return res.status(400).json({ errors: 'User does not exist' });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ errors: 'Invalid credential 2' });
+        return res.status(400).json({ errors: 'Password incorrect' });
       }
       const payload = {
         user: {
