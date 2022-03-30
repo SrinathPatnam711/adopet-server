@@ -6,6 +6,7 @@ const connectDB = require('./config/connectDB');
 
 const userRoute = require('./routes/userRoutes');
 const authRoute = require('./routes/authRoutes');
+const petRoutes = require("./routes/petRoutes")
 const app = express();
 
 app.use(cors());
@@ -18,6 +19,7 @@ connectDB();
 app.use(express.json());
  
 //router to organize our routes
+app.use('/api/pets', petRoutes);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 const PORT = process.env.PORT | 5000;
