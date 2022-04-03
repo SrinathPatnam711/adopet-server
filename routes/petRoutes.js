@@ -10,7 +10,7 @@ const router = express.Router();
 //access public
 router.get(
   '/',
-//authMiddleware,
+authMiddleware,
 async(req, res) => {
     try {      
        // const petDB= await Pet.find({user:req.user.id});
@@ -45,7 +45,7 @@ router.get('/:id', async(req, res) => {
 //access public
 router.post(
   '/',
-  authMiddleware,
+ authMiddleware,
   [
     check('name','Name is required').not().isEmpty(),
     check('amount','Enter valid amount').isInt({min:0})
@@ -67,7 +67,8 @@ router.post(
         vaccine: req.body.vaccine
       })
   } catch (error) {
-    return res.status(500).json({ error: 'Server Error' });
+    console.log(error);
+    return res.status(500).json({ error:'error' });
   }
  res.send('New pet added');
 });
@@ -75,9 +76,12 @@ router.post(
 //route Delete api/cars/
 //desc delete cars by id
 //access public
-router.delete('/', async(req, res) => {
-    try {
-        const delPet= await Pet.findOneAndRemove({_id: req.body.id});
+router.delete(
+  '/:id', 
+  authMiddleware,
+  async(req, res) => {
+    try {      
+        const delPet= await Pet.findOneAndRemove({_id: req.params.id});
         if (!delPet) {
             return res.status(404).send('Pet not found');
           } else {
@@ -91,7 +95,10 @@ router.delete('/', async(req, res) => {
 //route PUT api/cars/
 //desc update todo by id
 //access public
-router.put('/', async(req, res) => {
+router.put(
+  '/',
+  authMiddleware, 
+  async(req, res) => {
   //find the element
 try {
     const updatePet =await Pet.findById(req.body.id)
