@@ -1,17 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-//const cors = require('cors');
+const cors = require('cors');
 
 const connectDB = require('./config/connectDB');
 
 const raiseRoute = require('./routes/raiseRoutes');
+const eventRoute = require('./routes/eventRoutes');
 const userRoute = require('./routes/userRoutes');
 const authRoute = require('./routes/authRoutes');
 
 
 const app = express();
 
-//app.use(cors());
+app.use(cors());
 
 //connect to db
 connectDB();
@@ -22,6 +23,7 @@ app.use(express.json());
  
 //router to organize our routes
 app.use('/api/raises', raiseRoute);
+app.use('/api/events', eventRoute);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 
