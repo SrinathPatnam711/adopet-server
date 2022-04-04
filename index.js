@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
+const fileUpload = require('express-fileupload');
+const path = require('path');
 
 const cors = require('cors');
 
@@ -15,6 +17,10 @@ const app = express();
 
 app.use(cors());
 
+app.use(express.static('public'));
+//file upload
+app.use(fileUpload());
+
 //connect to db
 connectDB();
 
@@ -28,6 +34,29 @@ app.use('/api/faqs', FAQRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clinics', clinicRoutes);
+
+app.post('/upload', (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  const file = req.files.myFile;
+
+  const extfile = path.extname(file.name);
+
+  const allowedext = ['.png', '.jpg', '.gif'];
+
+  if (!allowedext.includes(extfile)) {
+    return res.status(400).send('invalid image format.');
+  }
+
+  const upath = 'public/uploads/' + file.name;
+
+  file.mv(upath, function (err) {
+    if (err) return res.status(500).send(err);
+    res.send('File uploaded!');
+  });
+});
 
 const PORT = process.env.PORT | 5000;
 

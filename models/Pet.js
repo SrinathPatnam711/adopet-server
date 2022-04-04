@@ -26,8 +26,8 @@ const petSchema = Schema({
         type : String,
         require :true,
     },
-    amount:{
-        type : String,
+    count:{
+        type : Number,
         require :true,
     },
     vaccine:{
