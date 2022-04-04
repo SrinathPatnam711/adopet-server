@@ -25,13 +25,6 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // if (!req.files || Object.keys(req.files).length === 0) {
-    //   return res.status(400).send('No files were uploaded.');
-    // }
-
-    // const file = req.files.myFile;
-    // const upath = 'public/uploads/' + file.name;
-
     try {
       let user1 = await User.findOne({ email: req.body.email });
       if (user1) {
@@ -50,7 +43,6 @@ router.post(
         name: req.body.name,
         email: req.body.email,
         password: password,
-        // profileImage: file.name,
       });
       await newUser.save();
 
@@ -58,13 +50,8 @@ router.post(
         user: {
           id: newUser.id,
           name: newUser.name,
-          // profileImage: newUser.profileImage,
         },
       };
-
-      // file.mv(upath, function (err) {
-      //   if (err) return res.status(500).send(err);
-      // });
 
       jwt.sign(
         payload,
