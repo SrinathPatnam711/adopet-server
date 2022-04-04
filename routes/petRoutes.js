@@ -19,8 +19,7 @@ async(req, res) => {
         res.send(petDB)
     } catch (error) {
         res.status(500).send(error)
-    }
-  
+    }  
 });
 
 //route Get api/cars/:id
@@ -48,7 +47,7 @@ router.post(
  authMiddleware,
   [
     check('name','Name is required').not().isEmpty(),
-    check('amount','Enter valid amount').isInt({min:0})
+    check('count','Enter valid count').isInt({min:0})
 ] , 
   async(req, res) => {
   try {
@@ -63,7 +62,7 @@ router.post(
         dob: req.body.dob,
         breed: req.body.breed,
         petType: req.body.petType,
-        amount: req.body.amount,
+        count: req.body.count,
         vaccine: req.body.vaccine
       })
   } catch (error) {
@@ -111,7 +110,7 @@ try {
       updatePet.dob=req.body.dob;
       updatePet.breed= req.body.breed;
       updatePet.petType= req.body.petType;
-      updatePet.amount= req.body.amount;
+      updatePet.count= req.body.count;
       updatePet.vaccine= req.body.vaccine;
       
       await updatePet.save();
