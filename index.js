@@ -12,6 +12,9 @@ const authRoutes = require('./routes/authRoutes');
 const petRoutes = require("./routes/petRoutes");
 const FAQRoutes = require("./routes/FAQRoutes");
 const clinicRoutes = require("./routes/clinicRoutes");
+const raiseRoute = require('./routes/raiseRoutes');
+const eventRoute = require('./routes/eventRoutes');
+
 
 const app = express();
 
@@ -34,6 +37,8 @@ app.use('/api/faqs', FAQRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clinics', clinicRoutes);
+app.use('/api/raises', raiseRoute);
+app.use('/api/events', eventRoute);
 
 app.post('/upload', (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
