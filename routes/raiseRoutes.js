@@ -99,7 +99,7 @@ try {
     if (!updateRaise) {
         return res.status(404).send('Raise not found');
       }   
-      console.log(updateRaise);
+      //console.log(updateRaise);
       updateRaise.title= req.body.title;
       updateRaise.description= req.body.description;
             

@@ -6,6 +6,7 @@ const connectDB = require('./config/connectDB');
 
 const raiseRoute = require('./routes/raiseRoutes');
 const eventRoute = require('./routes/eventRoutes');
+const aboutRoute = require('./routes/aboutRoutes');
 const userRoute = require('./routes/userRoutes');
 const authRoute = require('./routes/authRoutes');
 
@@ -24,6 +25,7 @@ app.use(express.json());
 //router to organize our routes
 app.use('/api/raises', raiseRoute);
 app.use('/api/events', eventRoute);
+app.use('/api/abouts', aboutRoute);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 
