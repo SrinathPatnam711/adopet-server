@@ -3,11 +3,23 @@ const Schema = mongoose.Schema;
 
 const AboutSchema = Schema({
 
-    title: {
+    ptype: {
     type: String,
     require: true,
   },
-  description: {
+  pbreed: {
+    type: String,
+    require: true,
+  },
+  pneeds: {
+    type: String,
+    require: true,
+  },
+  phabbits: {
+    type: String,
+    require: true,
+  },
+  experience: {
     type: String,
     require: true,
   },
