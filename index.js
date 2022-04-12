@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 
 const connectDB = require('./config/connectDB');
@@ -14,6 +15,9 @@ const authRoute = require('./routes/authRoutes');
 const app = express();
 
 app.use(cors());
+
+//file upload
+app.use(fileUpload());
 
 //connect to db
 connectDB();
@@ -30,7 +34,26 @@ app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 
 
+
+app.post('/upload', (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  const file = req.files.myFile;
+
+  
+    const upath = 'public/uploads/' + file.name;
+
+  file.mv(upath, function (err) {
+    if (err) return res.status(500).send(err);
+    res.send('File uploaded!');
+  });
+});
+
+
 const PORT = process.env.PORT | 5000;
+ 
 app.listen(PORT, 'localhost', () => {
   console.log('Server is running');
 });
