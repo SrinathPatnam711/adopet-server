@@ -52,8 +52,18 @@ router.post(
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        consolelog("error 1");
         return res.status(400).json({ errors: errors.array() });
       }
+
+      if (!req.files || Object.keys(req.files).length === 0) {       
+        console.log("error image");
+        res.status(400).send('No image uploaded.');
+        return;
+      }
+
+      const file = req.files.myFile;
+      const upath = 'public/uploads/' + file.name;
 
       const newPet = await Pet.create({
         user: req.user.id,
@@ -66,18 +76,10 @@ router.post(
         vaccine: req.body.vaccine
       })
 
-      if (!req.files || Object.keys(req.files).length === 0) {
-        return res.send('New pet created, No image uploaded.');
-      }  
-      const file = req.files.myFile;
-      const upath = 'public/uploads/' + file.name;
-
       file.mv(upath, function (err) {
         if (err) return res.status(500).send(err);
-      });
-
-    } catch (error) {
-      console.log(error);
+      });      
+    } catch (error) {      
       return res.status(500).json({ error: 'error' });
     }
     res.send('New pet added');

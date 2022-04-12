@@ -34,6 +34,10 @@ const petSchema = Schema({
         type : String,
         require :true,
     },
+    petImage:{
+        type : String,
+        require :true,
+    }
 })
 
 module.exports =mongoose.model('Pet', petSchema)
