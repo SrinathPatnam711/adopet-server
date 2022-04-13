@@ -23,7 +23,7 @@ app.use(cors());
 app.use(express.static('public'));
 //file upload
 app.use(fileUpload());
-
+app.use(express.static('public'))
 //connect to db
 connectDB();
 
