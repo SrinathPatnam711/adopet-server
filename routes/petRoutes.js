@@ -73,7 +73,8 @@ router.post(
         breed: req.body.breed,
         petType: req.body.petType,
         count: req.body.count,
-        vaccine: req.body.vaccine
+        vaccine: req.body.vaccine,
+        petImage:file.name
       })
 
       file.mv(upath, function (err) {
@@ -93,14 +94,14 @@ router.delete(
   authMiddleware,
   async (req, res) => {
     try {
-      const delPet = await Pet.findOneAndRemove({ _id: req.params.id });
+      const delPet = await Pet.findOneAndRemove({ _id: req.params.id ,user:req.user.id});
       if (!delPet) {
-        return res.status(404).send('Pet not found');
+        return res.status(404).json({errors:'OOPS!!!You are not allowed to delete this pet'});
       } else {
-        res.send("Pet deleted");
+        res.json({success:"Pet deleted"});
       }
     } catch (error) {
-      res.status(500).send('Server Error')
+      res.status(500).json({errors:'Server Error'})
     }
   });
 
@@ -113,10 +114,13 @@ router.put(
   async (req, res) => {
     //find the element
     try {
-      const updatePet = await Pet.findById(req.body.id)
+      const updatePet = await Pet.findOne({_id:req.body.id,user:req.user.id})
       if (!updatePet) {
-        return res.status(404).send('Pet not found');
+        return res.status(400).json({errors:'OOPS!!!You are not allowed to edit this pet'});
       }
+      console.log("Req- "+req.user.id);
+      console.log(updatePet._id);
+      
 
       console.log(updatePet);
       updatePet.name = req.body.name;
@@ -130,7 +134,7 @@ router.put(
       await updatePet.save();
       res.send(updatePet);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ errors: error.message });
     }
 
   });
