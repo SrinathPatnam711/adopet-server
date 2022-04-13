@@ -21,7 +21,7 @@ authMiddleware,
   
 });
 
-//route Get api/raise/:id
+//route Get api/event/:id
 //desc Get raise by id
 //access public
 router.get('/:id', async(req, res) => {
@@ -38,15 +38,15 @@ router.get('/:id', async(req, res) => {
     }   
 });
 
-//route Post api/raise
-//desc Add a raise
+//route Post api/event
+//desc Add a event
 //access public
 router.post(
   '/',
  authMiddleware,
   [
     check('title','Title is required').not().isEmpty(),
-    check('description','Description need to be at least 30 chars').isLength({ min: 30, }),
+    check('description','Description is required').not().isEmpty(),
 ] , 
   async(req, res) => {
   try {
@@ -66,8 +66,8 @@ router.post(
  res.send('New Event added');
 });
 
-//route Delete api/raise/
-//desc delete raise by id
+//route Delete api/event/
+//desc delete event by id
 //access public
 router.delete(
   '/:id', 
@@ -85,8 +85,8 @@ router.delete(
     } 
 });
 
-//route PUT api/raise/
-//desc update raise by id
+//route PUT api/event/
+//desc update event by id
 //access public
 router.put(
   '/',

@@ -71,8 +71,8 @@ router.post(
  res.send('New experience added');
 });
 
-//route Delete api/raise/
-//desc delete raise by id
+//route Delete api/about/
+//desc delete about by id
 //access public
 router.delete(
   '/:id', 
