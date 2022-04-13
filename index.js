@@ -14,16 +14,16 @@ const FAQRoutes = require("./routes/FAQRoutes");
 const clinicRoutes = require("./routes/clinicRoutes");
 const raiseRoute = require('./routes/raiseRoutes');
 const eventRoute = require('./routes/eventRoutes');
-
+const aboutRoute = require('./routes/aboutRoutes');
 
 const app = express();
 
 app.use(cors());
 
-app.use(express.static('public'));
 //file upload
 app.use(fileUpload());
 app.use(express.static('public'))
+
 //connect to db
 connectDB();
 
@@ -38,6 +38,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clinics', clinicRoutes);
 app.use('/api/raises', raiseRoute);
+app.use('/api/abouts', aboutRoute);
 app.use('/api/events', eventRoute);
 
 app.post('/upload', (req, res) => {
@@ -63,8 +64,26 @@ app.post('/upload', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT | 5000;
 
+app.post('/upload', (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  const file = req.files.myFile;
+
+  
+    const upath = 'public/uploads/' + file.name;
+
+  file.mv(upath, function (err) {
+    if (err) return res.status(500).send(err);
+    res.send('File uploaded!');
+  });
+});
+
+
+const PORT = process.env.PORT | 5000;
+ 
 app.listen(PORT, 'localhost', () => {
   console.log('Server is running');
 });
