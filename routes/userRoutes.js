@@ -15,7 +15,7 @@ router.post(
   [
     check('name', 'name is required').not().isEmpty(),
     check('email', 'Please enter valid email').isEmail(),
-    check('password', 'password need to be at least 12 char').isLength({
+    check('password', 'password need to be at least 5 char').isLength({
       min: 5,
     }),
   ],
@@ -28,7 +28,13 @@ router.post(
     try {
       let user1 = await User.findOne({ email: req.body.email });
       if (user1) {
-        return res.status(400).json({ errors: 'User already exist' });
+        return res.status(400).json({ errors: 'User already exists' });
+      }
+
+      console.log(user1);
+
+      if (req.body.password != req.body.confirm_password) {
+        return res.status(400).json({ errors: 'Password and confirm password do not match' });
       }
 
       const salt = await bcrypt.genSalt(10);

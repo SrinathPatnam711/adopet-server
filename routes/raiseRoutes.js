@@ -18,8 +18,7 @@ authMiddleware,
         res.send(raise);
     } catch (error) {
         res.status(500).send('server error');
-    }
-  
+    }  
 });
 
 //route Get api/raise/:id

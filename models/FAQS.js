@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const RaiseSchema = Schema({
-    title: {
+const FAQSchema = Schema({
+  question: {
     type: String,
     require: true,
   },
-  description: {
+  answer: {
     type: String,
     require: true,
   },
-  });
+});
 
-module.exports = mongoose.model('Raise', RaiseSchema);
+module.exports = mongoose.model('FAQ', FAQSchema);
