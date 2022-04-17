@@ -15,6 +15,7 @@ const clinicRoutes = require("./routes/clinicRoutes");
 const raiseRoute = require('./routes/raiseRoutes');
 const eventRoute = require('./routes/eventRoutes');
 const aboutRoute = require('./routes/aboutRoutes');
+const donationRoute = require('./routes/donationRoutes');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/clinics', clinicRoutes);
 app.use('/api/raises', raiseRoute);
 app.use('/api/abouts', aboutRoute);
 app.use('/api/events', eventRoute);
+app.use('/api/donations', donationRoute);
 
 app.post('/upload', (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
