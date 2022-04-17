@@ -10,7 +10,7 @@ const router = express.Router();
 //access public
 router.get(
   '/',
-authMiddleware,
+
  async (req, res) => {
     try {      
          const raise= await Raise.find();

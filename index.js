@@ -50,7 +50,7 @@ app.post('/upload', (req, res) => {
 
   const extfile = path.extname(file.name);
 
-  const allowedext = ['.png', '.jpg', '.gif'];
+  const allowedext = ['.png', '.jpg', '.jpeg','.gif'];
 
   if (!allowedext.includes(extfile)) {
     return res.status(400).send('invalid image format.');

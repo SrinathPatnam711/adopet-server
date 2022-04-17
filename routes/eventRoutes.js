@@ -10,7 +10,7 @@ const router = express.Router();
 //access public
 router.get(
   '/',
-authMiddleware,
+
  async (req, res) => {
     try {      
          const event= await Events.find();
@@ -43,7 +43,7 @@ router.get('/:id', async(req, res) => {
 //access public
 router.post(
   '/',
- authMiddleware,
+ //authMiddleware,
   [
     check('title','Title is required').not().isEmpty(),
     check('description','Description is required').not().isEmpty(),
@@ -54,14 +54,31 @@ router.post(
     if(!errors.isEmpty()){
       return res.status(400).json({errors:errors.array()});
     }
-      const newEvent = await Events.create({
+
+
+    if (!req.files || Object.keys(req.files).length === 0) {       
+      console.log("error image");
+      res.status(400).send('No image uploaded.');
+      return;
+    }
+
+    const file = req.files.myFile;
+    const upath = 'public/uploads/' + file.name;
+
+
+    const newEvent = await Events.create({
         user:req.user.id,
         title: req.body.title,
         description: req.body.description,
+       eImage:file.name
        })
+
+       file.mv(upath, function (err) {
+        if (err) return res.status(500).send(err);
+     });      
   } catch (error) {
-    //console.log(error);
-    return res.status(500).json({ error:'server error' });
+    console.log(error);
+   // return res.status(500).json({ error:'server error' });
   }
  res.send('New Event added');
 });
@@ -76,10 +93,10 @@ router.delete(
     try {      
         const delEvent= await Events.findOneAndRemove({_id: req.params.id});
         if (!delEvent) {
-            return res.status(404).send('Event not found');
+            return res.status(404).json({errors:'Sorry! You are not allowed to delete this event'});
           } else {
             res.send("Event deleted");
-          }
+          } 
     } catch (error) {
         res.status(500).send('Server Error')
     } 
@@ -94,11 +111,15 @@ router.put(
   async(req, res) => {
   //find the element
 try {
-    const updateEvent =await Events.findById(req.body.id)
+    const updateEvent =await Events.findOne({_id:req.body.id,user:req.user.id})
     if (!updateEvent) {
-        return res.status(404).send('Event not found');
+      return res.status(400).json({errors:'Sorry! You are not allowed to edit this event'});
       }   
+
+      console.log("Req- "+req.user.id);
+      console.log(updateEvent._id);
     
+      console.log(updateEvent);
       updateEvent.title= req.body.title;
       updateEvent.description= req.body.description;
             
