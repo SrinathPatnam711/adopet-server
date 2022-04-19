@@ -43,7 +43,7 @@ router.get('/:id', async(req, res) => {
 //access public
 router.post(
   '/',
- //authMiddleware,
+ authMiddleware,
   [
     check('title','Title is required').not().isEmpty(),
     check('description','Description is required').not().isEmpty(),
